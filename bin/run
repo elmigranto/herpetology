@@ -33,6 +33,10 @@ function what_is_a_command_to_run {
         print "mypy --strict --sqlite-cache '$cwd/src/'"
         ;;
 
+      test )
+        print "python -m unittest discover --start-directory '$cwd/src/' --pattern '*_test.py'"
+        ;;
+
       * )
         print "${argv[0]}"
     esac

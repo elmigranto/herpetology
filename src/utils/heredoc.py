@@ -2,14 +2,11 @@ from sys import maxsize as _fake_infinity
 
 
 def heredoc(multiline: str) -> str:
-    lines = list(map(
-        str.rstrip,
-        multiline.rstrip().strip('\n').split('\n')
-    ))
+    lines = multiline.rstrip().strip('\n').split('\n')
     characters_to_trim = min(map(_number_of_leading_space, lines))
 
     return '\n'.join(map(
-        lambda x: x[characters_to_trim:],
+        lambda x: x[characters_to_trim:].rstrip(),
         lines
     ))
 
