@@ -1,8 +1,12 @@
-{
-  "folders":
-  [
-    {
-      "path": "."
-    }
-  ]
+{ "folders": [
+    { "path": "bin",
+    },
+    { "path": "src",
+    },
+    { "path": ".",
+      "name": "🐍",
+      "folder_exclude_patterns": ["*"],
+      "binary_file_patterns": ["Pipfile.lock"],
+    },
+  ],
 }
