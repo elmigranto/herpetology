@@ -15,13 +15,17 @@ function main {
 } && readonly -f main
 
 function figure_out_what_to_run {
-  local to_execute && to_execute="pipenv run $(what_is_a_command_to_run)"
+  local prefix
 
   if should_restart_on_changes; then
-    to_execute="nodemon --watch src/ --ext py --exec '$to_execute'"
+    prefix='nodemon --watch src/ --ext py --exec'
   fi
 
-  print "$to_execute"
+  if outside_pipenv; then
+    prefix="$prefix pipenv run"
+  fi
+
+  print "$prefix $(what_is_a_command_to_run)"
 } && readonly -f figure_out_what_to_run
 
 function what_is_a_command_to_run {
@@ -44,6 +48,10 @@ function what_is_a_command_to_run {
     print "${argv[*]}"
   fi
 } && readonly -f what_is_a_command_to_run
+
+function outside_pipenv {
+  test -z "${VIRTUAL_ENV:-}"
+} && readonly -f outside_pipenv
 
 function should_restart_on_changes {
   test "$__basename" == 'runw'
