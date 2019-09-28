@@ -1,5 +1,8 @@
 from unittest import TestCase
-from utils.heredoc import heredoc, single_line
+from contextlib import redirect_stdout
+from io import StringIO
+from pprint import pformat
+from . import heredoc, single_line, pp
 
 
 class TestUtilsHeredocHeredoc(TestCase):
@@ -76,5 +79,22 @@ class TestUtilsHeredocSingleLine(TestCase):
                    are collapsed
                     into one!
             '''),
-            "Inline\t\tmultispace:  <-- is kept. But multiple empty lines like above and this indent to the left are collapsed into one!"
+
+            ' '.join([
+                'Inline\t\tmultispace:  <-- is kept.',
+                'But multiple empty lines like above',
+                'and this indent to the left',
+                'are collapsed into one!'
+            ]),
         )
+
+
+class PpTest(TestCase):
+    def test_it_prints_pformat_of_the_value(self):
+        with StringIO() as stream, redirect_stdout(stream):
+            pp(self)
+            self.assertEqual(stream.getvalue(), f'{pformat(self)}\n')
+
+    def test_it_returns_a_value(self):
+        with open('/dev/null', 'w') as stream, redirect_stdout(stream):
+            self.assertEqual(pp(stream), stream)
